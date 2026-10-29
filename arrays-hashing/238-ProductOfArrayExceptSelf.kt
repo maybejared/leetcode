@@ -6,8 +6,24 @@ package neetcode.p0238
 import practice.*
 
 class Solution {
-    fun productExceptSelf(nums: IntArray): IntArray {
-        TODO("Implement productExceptSelf")
+    class Solution {
+        fun productExceptSelf(nums: IntArray): IntArray {
+            val left = IntArray(nums.size) { 1 }
+            val right = IntArray(nums.size) { 1 }
+            nums.forEachIndexed { index, _ ->
+                if (index == 0) return@forEachIndexed
+                left[index] = left[index - 1] * nums[index - 1]
+            }
+
+            for (i in (nums.size - 1) downTo 0) {
+                if (i == nums.size - 1) continue
+                right[i] = right[i + 1] * nums[i + 1]
+            }
+
+            return left.mapIndexed { index, num ->
+                num * right[index]
+            }.toIntArray()
+        }
     }
 }
 

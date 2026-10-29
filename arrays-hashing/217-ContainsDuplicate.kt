@@ -1,13 +1,10 @@
-// 217. Contains Duplicate — Easy
-// https://leetcode.com/problems/contains-duplicate/
-// Implement the class below. Tests and helpers are not part of your submission.
 package neetcode.p0217
 
 import practice.*
 
 class Solution {
     fun containsDuplicate(nums: IntArray): Boolean {
-        TODO("Implement containsDuplicate")
+        return nums.groupBy { it }.any { it.value.size > 1 }
     }
 }
 
