@@ -22,8 +22,8 @@ case "$source_file" in
         repo_root="$(cd "$(dirname "$0")" && pwd)"
         kotlin_sources=("$source_file")
         case "$source_file" in
-            "$repo_root"/neetcode150/*)
-                support="$repo_root/neetcode150/support/TestSupport.kt"
+            "$repo_root"/*)
+                support="$repo_root/support/TestSupport.kt"
                 [[ "$source_file" == "$support" ]] || kotlin_sources+=("$support")
                 ;;
         esac
