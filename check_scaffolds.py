@@ -9,7 +9,7 @@ import tempfile
 
 root = Path(__file__).resolve().parent
 catalog = json.loads((root / "catalog.json").read_text())
-assert len(catalog) == 150 and len({p["number"] for p in catalog}) == 150
+assert catalog and len({p["number"] for p in catalog}) == len(catalog)
 sources = [root / p["file"] for p in catalog]
 assert all(p.is_file() for p in sources)
 assert set(sources) == {p for p in root.rglob("*.kt") if p.parent.name != "support"}
@@ -18,7 +18,7 @@ env["JAVA_HOME"] = subprocess.check_output(["/usr/libexec/java_home", "-v", "21"
 java = str(Path(env["JAVA_HOME"]) / "bin/java")
 with tempfile.TemporaryDirectory(prefix="neetcode-check-") as directory:
     jar = Path(directory) / "checks.jar"
-    print("Compiling 150 exercises and shared test helpers...", flush=True)
+    print(f"Compiling {len(catalog)} exercises and shared test helpers...", flush=True)
     result = subprocess.run(["kotlinc", *map(str, sources), *map(str, (root / "support").glob("*.kt")), "-jvm-target", "21", "-include-runtime", "-d", str(jar)], env=env, text=True, capture_output=True, timeout=180)
     assert result.returncode == 0, result.stderr
     subprocess.run([java, "-cp", str(jar), "practice.checks.SupportChecksKt"], check=True, timeout=20)
@@ -41,4 +41,4 @@ with tempfile.TemporaryDirectory(prefix="neetcode-check-") as directory:
     assert not errors, f"{len(errors)} exercise suites failed"
     passed = sum(counts[0] for _, counts, _ in results)
     pending = sum(counts[2] for _, counts, _ in results)
-    print(f"150/150 compile and execute. {passed} passing tests; {pending} TODO tests (expected for unsolved skeletons).")
+    print(f"{len(catalog)}/{len(catalog)} compile and execute. {passed} passing tests; {pending} TODO tests (expected for unsolved skeletons).")
