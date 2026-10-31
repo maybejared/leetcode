@@ -7,7 +7,20 @@ import practice.*
 
 class Solution {
     fun pivotIndex(nums: IntArray): Int {
-        TODO("Implement pivotIndex")
+        val prefix = IntArray(nums.size + 1) { 0 }
+        nums.forEachIndexed { i: Int, value: Int ->
+            prefix[i + 1] = prefix[i] + value
+        }
+
+        prefix.forEachIndexed { i: Int, value: Int ->
+            if (i == 0) return@forEachIndexed
+            val prev = prefix[i - 1]
+            val end = prefix[prefix.lastIndex]
+            if (prev == end - value) {
+                return i - 1
+            }
+        }
+        return -1
     }
 }
 
