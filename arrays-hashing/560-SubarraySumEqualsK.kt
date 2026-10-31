@@ -7,7 +7,20 @@ import practice.*
 
 class Solution {
     fun subarraySum(nums: IntArray, k: Int): Int {
-        TODO("Implement subarraySum")
+        // Prefix Summing -> Add a left most 0 to represent start of sequence
+        val frequency = mutableMapOf(0 to 1)
+        var prefix = 0
+        var count = 0
+        nums.forEach {
+            // Append count of current prefix 
+            prefix += it
+            // Find if prior subset is applicable to k & get all counts
+            count += frequency.getOrDefault(prefix - k, 0)
+            // Add current position to map so it can be located during future iterations
+            frequency[prefix] = frequency.getOrDefault(prefix, 0) + 1
+        }
+
+        return count
     }
 }
 
